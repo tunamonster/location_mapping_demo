@@ -1,0 +1,77 @@
+<html>
+<head>
+    <title>Fixed Marker Demo</title>
+    <style>#map_drag { width: 800px; height: 600px; }</style>
+    <style>#map_click { width: 800px; height: 600px; }</style>
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+</head>
+
+<body>
+<h1> By dragging (mobile) </h1>
+<div>
+    <input type="text" id="latitude_drag">
+    <input type="text" id="longitude_drag">
+</div>
+
+<div id="map_drag"></div>
+
+<script>
+var yangon = [16.8661, 96.1551]
+
+var map = L.map('map_drag').setView(yangon, 12);
+
+var marker = L.marker(map.getCenter())
+    .addTo(map)
+    .openPopup();
+
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+map.on('move', function(e) {
+    marker.setLatLng(map.getCenter());
+    coords = map.getCenter();
+    latitude_drag.value = coords.lat;
+    longitude_drag.value = coords.lng;
+});
+
+</script>
+
+<h1> By clicking (web) </h1>
+<div>
+    <input type="text" id="latitude_click">
+    <input type="text" id="longitude_click">
+</div>
+<div id="map_click"></div>
+
+<script>
+
+var yangon = [16.8661, 96.1551]
+
+var map2 = L.map('map_click').setView(yangon, 12);
+
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map2);
+
+var marker2;
+
+map2.on('click', function(e) {
+  if(typeof(marker2) === 'undefined') {
+    marker2 = new L.marker(e.latlng).bindPopup("find me here").addTo(map2); //create marker on first click
+  }
+  else
+  {
+    marker2.setLatLng(e.latlng) //replace marker on next clicks
+  }
+  latitude_click.value = e.latlng.lng
+  longitude_click.value = e.latlng.lat
+});
+
+</script>
+
+</body>
+</html>
+
